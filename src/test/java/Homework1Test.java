@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import java.time.Duration;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Condition.exactText;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,8 +30,7 @@ public class Homework1Test {
     public void firstTest() {
         open("/javascript_alerts");
         $x("//button[contains(text(),'Alert')]").click();
-        String confirmText = confirm();
-        assertThat(confirmText).isEqualTo("I am a JS Alert");
+        assertThat(dismiss()).isEqualTo("I am a JS Alert");
         assertThat($x("//*[@id='result']").text()).isEqualTo("You successfully clicked an alert");
 
     }
@@ -50,19 +50,15 @@ public class Homework1Test {
         open("/javascript_alerts");
         $x("//button[contains(text(),'Prompt')]").click();
         switchTo().alert().sendKeys("Test message");
-        String alertText = switchTo().alert().getText();
-        assertThat(alertText).isEqualTo("I am a JS prompt");
-        switchTo().alert().accept();
-        assertThat($("#result").text()).isEqualTo("You entered: Test message");
+        assertThat(prompt()).isEqualTo("I am a JS prompt");
+        $("#result").shouldHave(text("You entered: Test message"));
     }
 
     @Test
     public void fourthTest() {
         open("/javascript_alerts");
         $x("//button[contains(text(),'Confirm')]").click(ClickOptions.usingJavaScript());
-        String alertText = switchTo().alert().getText();
-        assertThat(alertText).isEqualTo("I am a JS Confirm");
-        confirm();
+        assertThat(confirm()).isEqualTo("I am a JS Confirm");
         assertThat($x("//*[@id='result']").text()).isEqualTo("You clicked: Ok");
     }
 
@@ -71,9 +67,7 @@ public class Homework1Test {
         open("/javascript_alerts");
         SelenideElement button = $x("//button[contains(text(),'Confirm')]");
         executeJavaScript("arguments[0].click();", button);
-        String alertText = switchTo().alert().getText();
-        assertThat(alertText).isEqualTo("I am a JS Confirm");
-        confirm();
+        assertThat(confirm()).isEqualTo("I am a JS Confirm");
         assertThat($x("//*[@id='result']").text()).isEqualTo("You clicked: Ok");
     }
 
