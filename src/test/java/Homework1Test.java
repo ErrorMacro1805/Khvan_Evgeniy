@@ -68,7 +68,8 @@ public class Homework1Test {
         SelenideElement button = $x("//button[contains(text(),'Confirm')]");
         executeJavaScript("arguments[0].click();", button);
         assertThat(confirm()).isEqualTo("I am a JS Confirm");
-        assertThat($x("//*[@id='result']").text()).isEqualTo("You clicked: Ok");
+        String resultText = (String) executeJavaScript("return document.getElementById('result').innerText;");
+        assertThat(resultText).isEqualTo("You clicked: Ok");
     }
 
     @AfterClass
